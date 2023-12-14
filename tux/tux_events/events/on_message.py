@@ -1,4 +1,5 @@
 from discord.ext import commands
+from tux_utils.tux_logger import logger
 
 
 class OnMessage(commands.Cog):
@@ -7,6 +8,7 @@ class OnMessage(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
+        logger.info("message")
         if message.author == self.bot.user:
             return
 

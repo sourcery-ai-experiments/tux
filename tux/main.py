@@ -3,28 +3,30 @@ from discord.ext import commands
 from tux_events.event_handler import EventHandler
 import asyncio
 import logging
-
-discord_logger = logging.getLogger('discord')
-discord_logger.setLevel(logging.INFO)
+from tux_utils.tux_logger import setup, logger
 
 bot_prefix = '!'
 intents = discord.Intents.all()
 bot = commands.Bot(command_prefix=bot_prefix, intents=intents)
 
+# Call the setup function once
+asyncio.run(setup(bot, project_logging_level=logging.DEBUG, discord_logging_level=logging.WARNING))
 event_handler = EventHandler(bot, True)
 
 
-async def setup():
-    bot = commands.Bot(command_prefix=bot_prefix, intents=intents)
+async def main():
     async with bot:
         await event_handler.setup(bot, True)
-        await bot.start('MTE4MjE5NDU4NTY5OTYzMTEzNA.GUaYP5.qbUQSLvBYzZ6TsXP_P3Qx1RZiobPrCDgF3NWpQ',
-                        reconnect=True)
+        await bot.start(
+            'MTE4MjE5NDU4NTY5OTYzMTEzNA.GUaYP5.qbUQSLvBYzZ6TsXP_P3Qx1RZiobPrCDgF3NWpQ',
+            reconnect=True
+        )
 
 
 @bot.event
 async def on_ready():
-    print(f'Bot is ready. Connected as {bot.user}')
-    await setup()
+    logger.info(f'Bot is ready. Connected as {bot.user}')
 
-asyncio.run(setup())
+
+# Only run asyncio.run(main()) once, as it's the entry point for the application
+asyncio.run(main())
