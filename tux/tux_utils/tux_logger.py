@@ -41,7 +41,7 @@ class TuxLogger(logging.Logger):
         """
         Set up the logging configuration for the custom logger.
         """
-        log_format = '%(asctime)s [%(log_color)s%(levelname)s%(reset)s]: %(message)s'
+        log_format = '%(asctime)s [%(log_color)s%(levelname)s%(reset)s] [%(name)s]: %(message)s'
         log_dir = 'logs'
         os.makedirs(log_dir, exist_ok=True)
 
@@ -50,11 +50,50 @@ class TuxLogger(logging.Logger):
         self.addHandler(handler)
 
         file_handler = logging.FileHandler(
-                os.path.join(log_dir, 'bot.log'),
-                mode='a'
+            os.path.join(log_dir, 'bot.log'),
+            mode='a'
         )
-        file_handler.setFormatter(logging.Formatter('%(asctime)s [%(levelname)s]: %(message)s'))
+        file_handler.setFormatter(logging.Formatter(
+            '%(asctime)s [%(levelname)s] [%(name)s]: %(message)s'))
         self.addHandler(file_handler)
+
+    def _log_to_file(self, level, message, caller_module):
+        """
+        Log a message to a specific file.
+
+        Parameters:
+        - level: The logging level (e.g., logging.DEBUG, logging.INFO, etc.).
+        - message: The log message.
+        - filename: The name of the file to log to.
+        """
+
+        file_handler = logging.FileHandler(
+            os.path.join('logs', f"{caller_module}.log"),
+            mode='a'
+        )
+        file_handler.setFormatter(
+            logging.Formatter(
+                f'%(asctime)s [%(levelname)s] [{caller_module}]: %(message)s'
+            )
+        )
+        self.addHandler(file_handler)
+        self.log(level, message)
+        self.removeHandler(file_handler)
+
+    def debug(self, message, filename="unknown"):
+        self._log_to_file(logging.DEBUG, message, filename)
+
+    def info(self, message, filename="unknown"):
+        self._log_to_file(logging.INFO, message, filename)
+
+    def warning(self, message, filename="unknown"):
+        self._log_to_file(logging.WARNING, message, filename)
+
+    def error(self, message, filename="unknown"):
+        self._log_to_file(logging.ERROR, message, filename)
+
+    def critical(self, message, filename="unknown"):
+        self._log_to_file(logging.CRITICAL, message, filename)
 
 
 class LoggingCog(commands.Cog):

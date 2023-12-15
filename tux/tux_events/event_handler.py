@@ -1,6 +1,10 @@
 from discord.ext import commands
 import os
-from tux_utils.tux_logger import logger
+from tux_utils.tux_logger import TuxLogger
+import logging
+
+
+logger = TuxLogger(__name__)
 
 
 class EventHandler(commands.Cog):
@@ -15,6 +19,8 @@ class EventHandler(commands.Cog):
         self.bot = bot
         self.debug = debug
         self.ignore_cogs = []
+        if debug:
+            logger.setLevel(logging.DEBUG)
 
     async def _load_events(self):
         """
@@ -31,14 +37,14 @@ class EventHandler(commands.Cog):
 
             if not filename.endswith('.py') or event_name in self.ignore_cogs \
                     or filename.startswith('__'):
-                logger.info(f"Skipping {module}.")
+                logger.info(f"Skipping {module}.", __name__)
                 continue
 
             try:
                 await self.bot.load_extension(module)
-                logger.debug(f'Successfully loaded event: {module}')
+                logger.debug(f'Successfully loaded event: {module}', __name__)
             except Exception as e:
-                logger.error(f'Failed to load event {module}. Error: {e}')
+                logger.error(f'Failed to load event {module}. Error: {e}', __name__)
 
     @commands.Cog.listener()
     async def on_ready(self):
@@ -47,7 +53,7 @@ class EventHandler(commands.Cog):
 
         This function is called when the bot successfully connects to Discord.
         """
-        logger.info(f'{self.bot.user} has connected to Discord!')
+        logger.info(f'{self.bot.user} has connected to Discord!', __name__)
 
     @classmethod
     async def setup(cls, bot, debug=False):

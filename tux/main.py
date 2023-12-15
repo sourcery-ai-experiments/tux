@@ -3,7 +3,9 @@ from discord.ext import commands
 from tux_events.event_handler import EventHandler
 import asyncio
 import logging
-from tux_utils.tux_logger import setup, logger
+from tux_utils.tux_logger import setup, TuxLogger
+
+logger = TuxLogger(__name__)
 
 bot_prefix = '!'
 intents = discord.Intents.all()
@@ -21,11 +23,6 @@ async def main():
             'MTE4MjE5NDU4NTY5OTYzMTEzNA.GUaYP5.qbUQSLvBYzZ6TsXP_P3Qx1RZiobPrCDgF3NWpQ',
             reconnect=True
         )
-
-
-@bot.event
-async def on_ready():
-    logger.info(f'Bot is ready. Connected as {bot.user}')
 
 
 # Only run asyncio.run(main()) once, as it's the entry point for the application
