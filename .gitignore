@@ -6,6 +6,11 @@ __pycache__/
 # C extensions
 *.so
 
+# Editors
+.vscode
+.vs
+.idea
+
 # Distribution / packaging
 .Python
 develop-eggs/
