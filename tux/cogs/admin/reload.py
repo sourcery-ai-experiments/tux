@@ -19,14 +19,14 @@ class Reload(commands.Cog):
             logger.info(f"Cog {cog} reloaded.")
             await ctx.send(f"Cog {cog} reloaded.")
 
-    @reload.error
-    async def reload_error(self, ctx: commands.Context[commands.Bot], error: Exception) -> None:
-        if isinstance(error, commands.MissingRequiredArgument):
-            await ctx.send("Please specify a cog to reload.")
-        elif isinstance(error, commands.ExtensionNotLoaded):
-            await ctx.send("That cog is not loaded.")
-        else:
-            logger.error(f"Error reloading cog: {error}")
+    # @reload.error
+    # async def reload_error(self, ctx: commands.Context[commands.Bot], error: Exception) -> None:
+    #     if isinstance(error, commands.MissingRequiredArgument):
+    #         await ctx.send("Please specify a cog to reload.")
+    #     elif isinstance(error, commands.ExtensionNotLoaded):
+    #         await ctx.send("That cog is not loaded.")
+    #     else:
+    #         logger.error(f"Error reloading cog: {error}")
 
 
 async def setup(bot: commands.Bot) -> None:

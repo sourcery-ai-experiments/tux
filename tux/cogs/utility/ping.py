@@ -8,6 +8,7 @@ class Ping(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
 
+    @app_commands.checks.has_any_role("Test")
     @app_commands.command(name="ping", description="Checks the bot's latency.")
     async def ping(self, interaction: discord.Interaction) -> None:
         discord_ping = round(self.bot.latency * 1000)

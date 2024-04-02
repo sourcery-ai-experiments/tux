@@ -7,7 +7,9 @@ class Load(commands.Cog):
         self.bot = bot
 
     # @commands.has_guild_permissions(administrator=True)
-    @commands.command(name="load", description="Loads a cog into the bot.")
+    @commands.command(
+        name="load", description="Loads a cog into the bot.", usage="load cogs.<directory>.<cog>"
+    )
     async def load(self, ctx: commands.Context[commands.Bot], *, cog: str) -> None:
         try:
             await self.bot.load_extension(cog)
@@ -18,14 +20,14 @@ class Load(commands.Cog):
             logger.info(f"Cog {cog} loaded.")
             await ctx.send(f"Cog {cog} loaded.")
 
-    @load.error
-    async def load_error(self, ctx: commands.Context[commands.Bot], error: Exception) -> None:
-        if isinstance(error, commands.MissingRequiredArgument):
-            await ctx.send("Please specify a cog to load.")
-        elif isinstance(error, commands.ExtensionAlreadyLoaded):
-            await ctx.send("That cog is already loaded.")
-        else:
-            logger.error(f"Error loading cog: {error}")
+    # @load.error
+    # async def load_error(self, ctx: commands.Context[commands.Bot], error: Exception) -> None:
+    #     if isinstance(error, commands.MissingRequiredArgument):
+    #         await ctx.send("Please specify a cog to load.")
+    #     elif isinstance(error, commands.ExtensionAlreadyLoaded):
+    #         await ctx.send("That cog is already loaded.")
+    #     else:
+    #         logger.error(f"Error loading cog: {error}")
 
 
 async def setup(bot: commands.Bot) -> None:
