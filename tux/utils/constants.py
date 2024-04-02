@@ -10,7 +10,6 @@ config_file = Path("config/settings.json")
 config = json.loads(config_file.read_text())
 
 
-# defining json stuff so it can be pulled later down the file
 class Constants:
     # Bot-related constants
     BOT_VERSION = "1.0.0"
@@ -41,15 +40,36 @@ class Constants:
         "BOT": 1234567890,
     }
 
+    # User ID Constants
+    USER_IDS: Final[dict[str, int]] = {
+        "ADMIN": config["Permissions"]["Admin"],
+        "MOD": config["Permissions"]["Mod"],
+        "JR MOD": config["Permissions"]["Jr_Mod"],
+        "OWNER": config["Permissions"]["Owner"],
+        "TESTING": config["Permissions"]["Testing"],
+    }
+
+    # Temp VC constants
+    TEMPVC_CATEGORY_ID = os.getenv("TEMPVC_CATEGORY_ID")
+    TEMPVC_CHANNEL_ID = os.getenv("TEMPVC_CHANNEL_ID")
+
     # Color constants
     EMBED_STATE_COLORS: Final[dict[str, int]] = {
-        "DEFAULT": 0xF2B033,
-        "INFO": 0x00BFFF,
-        "WARNING": 0xF67402,
-        "ERROR": 0xFF0000,
-        "SUCCESS": 0x55DD33,
-        "DEBUG": 0x800080,
+        # tux feet yellow
+        "DEFAULT": 0xF4D01A,
+        # catppuccino mocha sky
+        "INFO": 0x89DCEB,
+        # catppuccin latte peach
+        "WARNING": 0xFE640B,
+        # catppuccin latte red
+        "ERROR": 0xD20F39,
+        # catppuccin mocha green
+        "SUCCESS": 0xA6E3A1,
+        # catppuccin mocha mauve
+        "DEBUG": 0xCBA6F7,
+        # pure black
         "BLACK": 0x000000,
+        # pure white
         "WHITE": 0xFFFFFF,
     }
 
@@ -60,32 +80,24 @@ class Constants:
         "SUCCESS": "https://cdn3.emoji.gg/emojis/3228-info.png",
     }
 
-    # User ID Constants
-    USER_IDS: Final[dict[str, int]] = {
-        "ADMIN": config["Permissions"]["Admin"],
-        "MOD": config["Permissions"]["Mod"],
-        "JR MOD": config["Permissions"]["Jr_Mod"],
-        "OWNER": config["Permissions"]["Owner"],
-        "TESTING": config["Permissions"]["Testing"],
-    }
-    # Temp VC constants
-    TEMPVC_CATEGORY_ID = os.getenv("TEMPVC_CATEGORY_ID")
-    TEMPVC_CHANNEL_ID = os.getenv("TEMPVC_CHANNEL_ID")
-
-    # Discord constants
-    ACTION_ROW_MAX_ITEMS = 5
-    SELECTS_MAX_OPTIONS = 25
-    SELECT_MAX_NAME_LENGTH = 100
-    CONTEXT_MENU_NAME_LENGTH = 32
-    SLASH_CMD_NAME_LENGTH = 32
-    SLASH_CMD_MAX_DESC_LENGTH = 100
-    SLASH_CMD_MAX_OPTIONS = 25
-    SLASH_OPTION_NAME_LENGTH = 100
+    # Embed limit constants
     EMBED_MAX_NAME_LENGTH = 256
     EMBED_MAX_DESC_LENGTH = 4096
     EMBED_MAX_FIELDS = 25
     EMBED_TOTAL_MAX = 6000
     EMBED_FIELD_VALUE_LENGTH = 1024
+
+    # Interaction constants
+    ACTION_ROW_MAX_ITEMS = 5
+    SELECTS_MAX_OPTIONS = 25
+    SELECT_MAX_NAME_LENGTH = 100
+
+    # App commands constants
+    CONTEXT_MENU_NAME_LENGTH = 32
+    SLASH_CMD_NAME_LENGTH = 32
+    SLASH_CMD_MAX_DESC_LENGTH = 100
+    SLASH_CMD_MAX_OPTIONS = 25
+    SLASH_OPTION_NAME_LENGTH = 100
 
 
 """
@@ -95,8 +107,8 @@ Example:
 
 from tux.utils.constants import Constants as CONST
 print(CONST.BOT_NAME)
-print(CONST.COLORS.INFO)
-print(CONST.CHANNELS.AUDIT)
+print(CONST.EMBED_STATE_COLORS["INFO"])
+print(CONST.CHANNELS["AUDIT"])
 """
 
 CONST = Constants()
