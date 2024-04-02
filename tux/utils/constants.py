@@ -42,16 +42,24 @@ class Constants:
     }
 
     # Color constants
-    COLORS: Final[dict[str, int]] = {
+    EMBED_STATE_COLORS: Final[dict[str, int]] = {
         "DEFAULT": 0xF2B033,
         "INFO": 0x00BFFF,
         "WARNING": 0xF67402,
         "ERROR": 0xFF0000,
-        "SUCCESS": 0x00FF00,
+        "SUCCESS": 0x55DD33,
         "DEBUG": 0x800080,
         "BLACK": 0x000000,
         "WHITE": 0xFFFFFF,
     }
+
+    EMBED_STATE_ICONS: Final[dict[str, str]] = {
+        "INFO": "https://cdn3.emoji.gg/emojis/3228-info.png",
+        "WARNING": "https://cdn3.emoji.gg/emojis/3228-info.png",
+        "ERROR": "https://cdn3.emoji.gg/emojis/3228-info.png",
+        "SUCCESS": "https://cdn3.emoji.gg/emojis/3228-info.png",
+    }
+
     # User ID Constants
     USER_IDS: Final[dict[str, int]] = {
         "ADMIN": config["Permissions"]["Admin"],
@@ -63,6 +71,21 @@ class Constants:
     # Temp VC constants
     TEMPVC_CATEGORY_ID = os.getenv("TEMPVC_CATEGORY_ID")
     TEMPVC_CHANNEL_ID = os.getenv("TEMPVC_CHANNEL_ID")
+
+    # Discord constants
+    ACTION_ROW_MAX_ITEMS = 5
+    SELECTS_MAX_OPTIONS = 25
+    SELECT_MAX_NAME_LENGTH = 100
+    CONTEXT_MENU_NAME_LENGTH = 32
+    SLASH_CMD_NAME_LENGTH = 32
+    SLASH_CMD_MAX_DESC_LENGTH = 100
+    SLASH_CMD_MAX_OPTIONS = 25
+    SLASH_OPTION_NAME_LENGTH = 100
+    EMBED_MAX_NAME_LENGTH = 256
+    EMBED_MAX_DESC_LENGTH = 4096
+    EMBED_MAX_FIELDS = 25
+    EMBED_TOTAL_MAX = 6000
+    EMBED_FIELD_VALUE_LENGTH = 1024
 
 
 """
