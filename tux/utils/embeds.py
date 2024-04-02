@@ -17,7 +17,7 @@ def get_timestamp(
 def get_footer(
     ctx: commands.Context[commands.Bot] | None, interaction: discord.Interaction | None
 ) -> tuple[str, str]:
-    footer = ("", "")
+    footer = ("Requested by Tux", "")
     if ctx:
         footer = (f"Requested by {ctx.author.display_name}", ctx.author.display_avatar.url)
     elif interaction:
@@ -28,16 +28,26 @@ def get_footer(
     return footer
 
 
+def shell_terminal_format(user: str) -> str:
+    return f"[{user}@tux ~]$"
+
+
 def base_embed(
     ctx: commands.Context[commands.Bot] | None, interaction: discord.Interaction | None, state: str
 ) -> discord.Embed:
-    embed = discord.Embed()
-
-    embed.color = CONST.EMBED_STATE_COLORS[state]
-    embed.set_author(name=state.capitalize(), icon_url=CONST.EMBED_STATE_ICONS[state])
-    embed.timestamp = get_timestamp(ctx, interaction)
     footer = get_footer(ctx, interaction)
+    timestamp = get_timestamp(ctx, interaction)
+
+    if ctx:
+        user_name = ctx.author.display_name
+    else:
+        user_name = interaction.user.display_name if interaction else "Tux"
+
+    embed = discord.Embed()
+    embed.color = CONST.EMBED_STATE_COLORS[state]
+    embed.set_author(name=shell_terminal_format(user_name), icon_url=CONST.EMBED_STATE_ICONS[state])
     embed.set_footer(text=footer[0], icon_url=footer[1])
+    embed.timestamp = timestamp
 
     return embed
 
@@ -56,45 +66,45 @@ def create_embed(
 
 
 def create_default_embed(
-    ctx: commands.Context[commands.Bot] | None,
-    interaction: discord.Interaction | None,
     title: str,
     description: str,
+    ctx: commands.Context[commands.Bot] | None = None,
+    interaction: discord.Interaction | None = None,
 ) -> discord.Embed:
     return create_embed(ctx, interaction, "DEFAULT", title, description)
 
 
 def create_info_embed(
-    ctx: commands.Context[commands.Bot] | None,
-    interaction: discord.Interaction | None,
     title: str,
     description: str,
+    ctx: commands.Context[commands.Bot] | None = None,
+    interaction: discord.Interaction | None = None,
 ) -> discord.Embed:
     return create_embed(ctx, interaction, "INFO", title, description)
 
 
 def create_error_embed(
-    ctx: commands.Context[commands.Bot] | None,
-    interaction: discord.Interaction | None,
     title: str,
     description: str,
+    ctx: commands.Context[commands.Bot] | None = None,
+    interaction: discord.Interaction | None = None,
 ) -> discord.Embed:
     return create_embed(ctx, interaction, "ERROR", title, description)
 
 
 def create_warning_embed(
-    ctx: commands.Context[commands.Bot] | None,
-    interaction: discord.Interaction | None,
     title: str,
     description: str,
+    ctx: commands.Context[commands.Bot] | None = None,
+    interaction: discord.Interaction | None = None,
 ) -> discord.Embed:
     return create_embed(ctx, interaction, "WARNING", title, description)
 
 
 def create_success_embed(
-    ctx: commands.Context[commands.Bot] | None,
-    interaction: discord.Interaction | None,
     title: str,
     description: str,
+    ctx: commands.Context[commands.Bot] | None = None,
+    interaction: discord.Interaction | None = None,
 ) -> discord.Embed:
     return create_embed(ctx, interaction, "SUCCESS", title, description)

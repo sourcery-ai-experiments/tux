@@ -3,6 +3,8 @@ from discord import app_commands
 from discord.ext import commands
 from loguru import logger
 
+from tux.utils.embeds import create_success_embed
+
 
 class Ping(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
@@ -12,10 +14,10 @@ class Ping(commands.Cog):
     async def ping(self, interaction: discord.Interaction) -> None:
         discord_ping = round(self.bot.latency * 1000)
 
-        embed = discord.Embed(
+        embed = create_success_embed(
+            interaction=interaction,
             title="Pong!",
-            description=f"{discord_ping}ms",
-            color=discord.Color.green(),
+            description=f"Discord Websocket Latency: `{discord_ping}ms`",
         )
 
         logger.info(f"{interaction.user} used the ping command in {interaction.channel}.")

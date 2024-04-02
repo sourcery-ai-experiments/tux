@@ -76,8 +76,8 @@ class Constants:
     EMBED_STATE_ICONS: Final[dict[str, str]] = {
         "INFO": "https://cdn3.emoji.gg/emojis/3228-info.png",
         "WARNING": "https://cdn3.emoji.gg/emojis/3228-info.png",
-        "ERROR": "https://cdn3.emoji.gg/emojis/3228-info.png",
-        "SUCCESS": "https://cdn3.emoji.gg/emojis/3228-info.png",
+        "ERROR": "https://github.com/catppuccin/catppuccin/blob/main/assets/palette/circles/latte_red.png?raw=true",
+        "SUCCESS": "https://github.com/catppuccin/catppuccin/blob/main/assets/palette/circles/mocha_green.png?raw=true",
     }
 
     # Embed limit constants
