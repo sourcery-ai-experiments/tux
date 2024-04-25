@@ -1,9 +1,10 @@
 import discord
-from discord import app_commands
+from discord import Embed, app_commands
 from discord.ext import commands
 from loguru import logger
 
 from tux.utils.embeds import EmbedCreator
+from tux.utils.pagination import InteractionListMenuView
 
 des_ids = [
     [1175177565086953523, "_kde"],
@@ -33,30 +34,57 @@ des_ids = [
 ]
 
 distro_ids = [
-    [1175176142899122246, "_arch"],
-    [1175176866928263220, "_debian"],
-    [1175176922460860517, "_fedora"],
-    [1175176812293271652, "_ubuntu"],
-    [1175235143707918436, "_windows"],
-    [1175176279616663573, "_gentoo"],
-    [1175227850119458897, "_freebsd"],
-    [1175177831551086593, "_nixos"],
-    [1175178088347344916, "_void"],
-    [1175176981936087161, "_opensuse"],
-    [1175244437530611712, "_macos"],
-    [1175241975818092564, "_alpine"],
-    [1175177993526726717, "_linuxmint"],
-    [1175221054684286996, "_openbsd"],
-    [1176533514385096714, "_bedrock"],
-    [1178347402730688542, "_endeavouros"],
-    [1178391378812735508, "_artix"],
-    [1182152672447569972, "_slackware"],
-    [1178347123905929316, "_popos"],
-    [1175177750143848520, "_kisslinux"],
-    [1180570700734546031, "tux"],
-    [1191106506276479067, "_garuda"],
-    [1192177499413684226, "_asahi"],
-    [1207599112585740309, "_fedoraatomic"],
+    [1227797149706879047, ""],
+    [1223679701122551891, ""],
+    [1224789424240459889, ""],
+    [1223693433772707880, ""],
+    [1223693380739924018, ""],
+    [1223693346699214999, ""],
+    [1223693813415936030, ""],
+    [1223687364736712737, ""],
+    [1224049583919857664, ""],
+    [1224060704970248222, ""],
+    [1232404504331161691, ""],
+    [1232404504331161691, ""],
+    [1232404490808856596, ""],
+    [1232404477315907584, ""],
+    [1232404453894918215, ""],
+    [1232404354925854801, ""],
+    [1224853095033606186, ""],
+    [1232405040589836410, ""],
+    [1232405056268271627, ""],
+    [1232405210949746788, ""],
+    [1232405261730447391, ""],
+    [1232405297226842202, ""],
+    [1232405397965373502, ""],
+    [1232405452944576522, ""],
+    [1232405490143854644, ""],
+    [1232405533944709241, ""],
+    [1232405623207891056, ""],
+    # [1175176142899122246, "_arch"],
+    # [1175176866928263220, "_debian"],
+    # [1175176922460860517, "_fedora"],
+    # [1175176812293271652, "_ubuntu"],
+    # [1175235143707918436, "_windows"],
+    # [1175176279616663573, "_gentoo"],
+    # [1175227850119458897, "_freebsd"],
+    # [1175177831551086593, "_nixos"],
+    # [1175178088347344916, "_void"],
+    # [1175176981936087161, "_opensuse"],
+    # [1175244437530611712, "_macos"],
+    # [1175241975818092564, "_alpine"],
+    # [1175177993526726717, "_linuxmint"],
+    # [1175221054684286996, "_openbsd"],
+    # [1176533514385096714, "_bedrock"],
+    # [1178347402730688542, "_endeavouros"],
+    # [1178391378812735508, "_artix"],
+    # [1182152672447569972, "_slackware"],
+    # [1178347123905929316, "_popos"],
+    # [1175177750143848520, "_kisslinux"],
+    # [1180570700734546031, "tux"],
+    # [1191106506276479067, "_garuda"],
+    # [1192177499413684226, "_asahi"],
+    # [1207599112585740309, "_fedoraatomic"],
 ]
 
 lang_ids = [
@@ -123,12 +151,178 @@ misc_ids = [
     [1189236400571301958, "_chromium"],
 ]
 
-# TODO: Figure out how to make this work without hard coding the roles and emojis.
+# # TODO: Figure out how to make this work without hard coding the roles and emojis.
+
+
+# class RoleCount(commands.Cog):
+#     def __init__(self, bot: commands.Bot) -> None:
+#         self.bot = bot
+
+#     @app_commands.command(name="rolecount", description="Shows the number of users in each role.")
+#     @app_commands.describe(which="Which option to list!")
+#     @app_commands.choices(
+#         which=[
+#             app_commands.Choice(name="Distro", value="ds"),
+#             app_commands.Choice(name="Language", value="lg"),
+#             app_commands.Choice(name="DE/WM", value="de"),
+#             app_commands.Choice(name="Misc", value="misc"),
+#             app_commands.Choice(name="Vanity", value="vanity"),
+#         ]
+#     )
+#     async def rolecount(
+#         self, interaction: discord.Interaction, which: discord.app_commands.Choice[str]
+#     ) -> None:
+#         embed = EmbedCreator.create_info_embed(
+#             title="Role Count",
+#             description=f"Here is the number of users in each {which.name} role.",
+#             interaction=interaction,
+#         )
+
+#         if interaction.guild:
+#             match which.value:
+#                 case "ds":  # Distros
+#                     roles_emojis = distro_ids
+
+#                 case "lg":  # Languages
+#                     roles_emojis = lang_ids
+
+#                 case "de":  # DE/WMs
+#                     roles_emojis = des_ids
+
+#                 case "misc":  # Misc roles
+#                     roles_emojis = misc_ids
+
+#                 case "vanity":  # Vanity roles
+#                     roles_emojis = vanity_ids
+
+#                 case _:  # Default case
+#                     roles_emojis = []
+
+#             for role_emoji in roles_emojis:
+#                 role_id = int(role_emoji[0])
+#                 role = interaction.guild.get_role(role_id)
+#                 emoji = None
+
+#                 if role:
+#                     emoji = role.unicode_emoji or discord.utils.get(
+#                         self.bot.emojis, name=role_emoji[1]
+#                     )
+
+#                 if role and emoji:
+#                     embed.add_field(
+#                         name=f"{emoji!s} {role.name}",
+#                         value=f"{len(role.members)} users",
+#                         inline=True,
+#                     )
+#                 else:
+#                     missing = "Role" if role is None else "Emoji"
+#                     logger.warning(
+#                         f"Cannot find {missing} with ID {role_emoji[0]} or name {role_emoji[1]}"
+#                     )
+
+#         await interaction.response.send_message(embed=embed)
+
+#         logger.info(f"{interaction.user} requested role count for {which.name}.")
+
+
+# async def setup(bot: commands.Bot) -> None:
+#     await bot.add_cog(RoleCount(bot))
+
+
+# class RoleCount(commands.Cog):
+#     def __init__(self, bot: commands.Bot) -> None:
+#         self.bot = bot
+
+#     @app_commands.command(name="rolecount", description="Shows the number of users in each role.")
+#     @app_commands.describe(which="Which option to list!")
+#     @app_commands.choices(
+#         which=[
+#             app_commands.Choice(name="Distro", value="ds"),
+#             app_commands.Choice(name="Language", value="lg"),
+#             app_commands.Choice(name="DE/WM", value="de"),
+#             app_commands.Choice(name="Misc", value="misc"),
+#             app_commands.Choice(name="Vanity", value="vanity"),
+#         ]
+#     )
+#     async def rolecount(
+#         self, interaction: discord.Interaction, which: discord.app_commands.Choice[str]
+#     ) -> None:
+#         if interaction.guild:
+#             match which.value:
+#                 case "ds":  # Distros
+#                     roles_emojis = distro_ids
+#                 case "lg":  # Languages
+#                     roles_emojis = lang_ids
+#                 case "de":  # DE/WMs
+#                     roles_emojis = des_ids
+#                 case "misc":  # Misc roles
+#                     roles_emojis = misc_ids
+#                 case "vanity":  # Vanity roles
+#                     roles_emojis = vanity_ids
+#                 case _:  # Default case
+#                     roles_emojis = []
+
+#             pages: list[discord.Embed] = []
+
+#             embed = EmbedCreator.create_info_embed(
+#                 title=f"{which.name} Roles",
+#                 description="Number of users in each role",
+#                 interaction=interaction,
+#             )
+
+#             role_count = 0
+
+#             for role_emoji in roles_emojis:
+#                 role_id = int(role_emoji[0])
+#                 if role := interaction.guild.get_role(role_id):
+#                     if role_count >= 25:
+#                         pages.append(embed)
+#                         embed = EmbedCreator.create_info_embed(
+#                             title=f"{which.name} Roles",
+#                             description="Number of users in each role",
+#                             interaction=interaction,
+#                         )
+#                         role_count = 0
+
+#                     emoji = role.unicode_emoji or discord.utils.get(
+#                         self.bot.emojis, name=role_emoji[1]
+#                     )
+
+#                     embed.add_field(
+#                         name=f"{emoji!s} {role.name}",
+#                         value=f"{len(role.members)} users",
+#                         inline=True,
+#                     )
+#                     role_count += 1
+
+#             if role_count > 0:
+#                 pages.append(embed)
+
+#             if pages:
+#                 paginator = InteractionListMenuView(user_id=interaction.user.id, listmenu=pages)
+#                 await paginator.start(interaction.response)
+#             else:
+#                 await interaction.response.send_message(
+#                     "No roles found to display.", ephemeral=True
+#                 )
+
+#         logger.info(f"{interaction.user} requested role count for {which.name}.")
+
+
+# async def setup(bot: commands.Bot) -> None:
+#     await bot.add_cog(RoleCount(bot))
 
 
 class RoleCount(commands.Cog):
-    def __init__(self, bot: commands.Bot) -> None:
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
+        self.roles_emoji_mapping = {
+            "ds": distro_ids,
+            "lg": lang_ids,
+            "de": des_ids,
+            "misc": misc_ids,
+            "vanity": vanity_ids,
+        }
 
     @app_commands.command(name="rolecount", description="Shows the number of users in each role.")
     @app_commands.describe(which="Which option to list!")
@@ -144,58 +338,65 @@ class RoleCount(commands.Cog):
     async def rolecount(
         self, interaction: discord.Interaction, which: discord.app_commands.Choice[str]
     ) -> None:
-        embed = EmbedCreator.create_info_embed(
-            title="Role Count",
-            description=f"Here is the number of users in each {which.name} role.",
-            interaction=interaction,
-        )
-
         if interaction.guild:
-            match which.value:
-                case "ds":  # Distros
-                    roles_emojis = distro_ids
-
-                case "lg":  # Languages
-                    roles_emojis = lang_ids
-
-                case "de":  # DE/WMs
-                    roles_emojis = des_ids
-
-                case "misc":  # Misc roles
-                    roles_emojis = misc_ids
-
-                case "vanity":  # Vanity roles
-                    roles_emojis = vanity_ids
-
-                case _:  # Default case
-                    roles_emojis = []
-
-            for role_emoji in roles_emojis:
-                role_id = int(role_emoji[0])
-                role = interaction.guild.get_role(role_id)
-                emoji = None
-
-                if role:
-                    emoji = role.unicode_emoji or discord.utils.get(
-                        self.bot.emojis, name=role_emoji[1]
-                    )
-
-                if role and emoji:
-                    embed.add_field(
-                        name=f"{emoji!s} {role.name}",
-                        value=f"{len(role.members)} users",
-                        inline=True,
-                    )
-                else:
-                    missing = "Role" if role is None else "Emoji"
-                    logger.warning(
-                        f"Cannot find {missing} with ID {role_emoji[0]} or name {role_emoji[1]}"
-                    )
-
-        await interaction.response.send_message(embed=embed)
+            roles_emojis = self.roles_emoji_mapping.get(which.value, [])
+            await self.process_roles(interaction, roles_emojis, which)
 
         logger.info(f"{interaction.user} requested role count for {which.name}.")
 
+    async def process_roles(
+        self,
+        interaction: discord.Interaction,
+        roles_emojis: list[tuple[str, str]],
+        which: discord.app_commands.Choice[str],
+    ) -> None:
+        pages = []
+        role_count = 0
+        embed = self.create_embed(interaction, which)
 
-async def setup(bot: commands.Bot) -> None:
+        for role_emoji in roles_emojis:
+            role_id = int(role_emoji[0])
+            if role := interaction.guild.get_role(role_id):
+                role_count, embed = self.format_embed(
+                    embed, interaction, role, role_count, role_emoji, which, pages
+                )
+
+        if embed.fields:
+            pages.append(embed)
+
+        await self.send_response(interaction, pages)
+
+    def format_embed(self, embed, interaction, role, role_count, role_emoji, which, pages):
+        if role_count >= 25:
+            pages.append(embed)
+            embed = self.create_embed(interaction, which)
+            role_count = 0
+
+        emoji = role.unicode_emoji or discord.utils.get(self.bot.emojis, name=role_emoji[1])
+
+        embed.add_field(
+            name=f"{emoji!s} {role.name}",
+            value=f"{len(role.members)} users",
+            inline=True,
+        )
+        role_count += 1
+
+        return role_count, embed
+
+    def create_embed(self, interaction, which):
+        return EmbedCreator.create_info_embed(
+            title=f"{which.name} Roles",
+            description="Number of users in each role",
+            interaction=interaction,
+        )
+
+    async def send_response(self, interaction: discord.Interaction, pages: list[Embed]):
+        if pages:
+            paginator = InteractionListMenuView(user_id=interaction.user.id, listmenu=pages)
+            await paginator.start(interaction.response)
+        else:
+            await interaction.response.send_message("No roles found to display.", ephemeral=True)
+
+
+async def setup(bot: commands.Bot):
     await bot.add_cog(RoleCount(bot))
